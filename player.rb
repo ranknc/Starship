@@ -1,5 +1,5 @@
 require "gosu"
-
+require_relative 'zorder'
 class Player
 
 	TURN_INCREMENT = 4.5
@@ -25,7 +25,7 @@ class Player
 
 	def accelerate
 		@vel_x += Gosu::offset_x(@angle, ACCELERATION)
-		@vel_y += Gosu::offset_y(@amgle, ACCELERATION)
+		@vel_y += Gosu::offset_y(@angle, ACCELERATION)
 		
 	end
 
@@ -41,7 +41,7 @@ class Player
 	end
 
 	def draw
-		@image.draw.rot(@x, @y, 1, @angle)
+		@image.draw_rot(@x, @y, ZOrder::PLAYER, @angle)
 	end
 
 end
