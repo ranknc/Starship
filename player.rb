@@ -3,14 +3,18 @@ require_relative 'zorder'
 require_relative 'star'
 class Player
 
-	TURN_INCREMENT = 4.5
-	ACCELERATION = 0.5
+	attr_reader :score
+
+	TURN_INCREMENT = 3.0
+	ACCELERATION = 0.3
 	COLLISION_DISTANCE = 35.0
 
 	def initialize
 		@x = @y = @vel_x = @vel_y = @angle = 0.0
 		@score = 0
 		@image = Gosu::Image.new("media/starfighter.bmp")
+		@beep = Gosu::Sample.new("media/beep.wav")
+		@boom = Gosu::Sample.new("media/explosion.wav")
 	end
 
 	def warp(x, y)
@@ -51,15 +55,37 @@ class Player
 	end
 
 	def collect_stars(stars)
-		if stars.reject! { |star| colliding?(star)}
-		@score += 1
+		stars.reject! do |star|
+			if colliding?(star) then
+			@score += 1
+			@beep.play
+			true
+			else
+			false
+			end
+		end
+	end
+	def collect_bombs(bombs)
+		bombs.reject! do |bomb|
+			if colliding(bomb) then
+			@score -= 1
+			@boom.play
+			true
+			else
+			false
+			end
+		end
 	end
 
 	private
 
-	def colliding?(star)
-		Gosu::Distance(@x, @y, star.x, star.y) < COLLISION_DISTANCE
+		def colliding?(star)
+		Gosu::distance(@x, @y, star.x, star.y) < COLLISION_DISTANCE
 		
-	end
+		end
+		def colliding(bomb)
+		Gosu::distance(@x, @y, bomb.x, bomb.y) < COLLISION_DISTANCE
+		
+		end
 
 end

@@ -19,7 +19,7 @@ class Star
 		img = @animation[Gosu::milliseconds / 100 % @animation.size]
 		img.draw(
 			@x - img.width / 2.0,
-			@y - height / 2.0,
+			@y - img.height / 2.0,
 			ZOrder::STARS,
 			1, 1, @color, :add)
 	end
